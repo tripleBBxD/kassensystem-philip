@@ -1,0 +1,46 @@
+// dev access: name = dev, pw = devAccess
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Chip {
+  id             Int    @id @default(autoincrement())
+  price          Int    @unique
+  bundles        Bundle[]
+  transactions   Transaction[]
+}
+
+model Bundle {
+  id             Int    @id @default(autoincrement())
+  name           String @unique
+  price          Int
+  chips          Chip[]
+  transactions   Transaction[]
+}
+
+model Transaction {
+  id             Int    @id @default(autoincrement())
+  creator        User   @relation(fields: [creatorID], references: [id])
+  bundles        Bundle[]
+  chips          Chip[]
+  isPurchase     Boolean
+  sessionId      Int
+  createdAt      DateTime @default(now())
+
+  creatorID      Int
+}
+
+model User {
+  id             Int    @id @default(autoincrement())
+  name           String @unique
+  password       String
+  isAdmin        Boolean
+  transactions   Transaction[]
+  currentSession Int?
+}
