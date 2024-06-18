@@ -1,4 +1,4 @@
-import { error, type Cookies } from '@sveltejs/kit';
+import { error, type Actions, type Cookies } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma/prisma';
 
@@ -34,3 +34,10 @@ export const load: PageServerLoad = async ({cookies}) => {
         console.log("User " + (await validationData).userName + " successfully logged in!")
     }
 }
+
+export const actions = {
+    addUser: async ({request}) => {
+        console.log("Adding User")
+        console.log(await request.formData())
+    }
+} satisfies Actions

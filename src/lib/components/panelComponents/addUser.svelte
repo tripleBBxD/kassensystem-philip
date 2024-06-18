@@ -4,6 +4,12 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import * as Select from "$lib/components/ui/select/index.js";
+	import type { Selected } from "bits-ui";
+
+
+
+    let selectedRight: string
+    $: console.log()
 </script>
 
 <Card>
@@ -18,7 +24,17 @@
                     <Input id="username" name="username" placeholder="Username"/>
                     <Label for="password"></Label>
                     <Input id="password" name="password" placeholder="Passwort"/>
-                    <Button type="submit">Anmelden</Button>
+                    <Select.Root selected={selectedRights} onSelectedChange={(v) => }>
+                        <Select.Trigger id="isAdmin">
+                            <Select.Value placeholder="Berechtigungen"/>
+                        </Select.Trigger>
+                        <Select.Content>
+                            <Select.Item value="isAdmin" label="Administrator"></Select.Item>
+                            <Select.Item value="isNotAdmin" label="Kassierer"></Select.Item>
+                        </Select.Content>
+                    </Select.Root>
+                    <input hidden bind:value={selectedRights} name="selectedRights" id="selectedRights"/>
+                    <Button type="submit">Nutzer hinzufügen</Button>
                 </div>
             </div>
         </form>
