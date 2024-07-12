@@ -1,13 +1,16 @@
 import prisma from "../src/lib/prisma/prisma"
 
+
 await prisma.chip.create({
     data: {
+        value: 5,
         price: 5
     }
 })
 
 await prisma.chip.create({
     data: {
+        value: 2,
         price: 2
     }
 })
@@ -17,12 +20,22 @@ await prisma.bundle.create({
         name: "Bundle 1",
         price: 6,
         chips: {
-            connect: [
+            create: [
                 {
-                    id: 1
+                    amount: 4,
+                    chip: {
+                        connect: {
+                            id: 1
+                        }
+                    }
                 },
                 {
-                    id: 2
+                    amount: 2,
+                    chip: {
+                        connect: {
+                            id: 2
+                        }
+                    }
                 }
             ]
         }
@@ -48,9 +61,34 @@ await prisma.transaction.create({
         isPurchase: true,
         sessionId: 1234,
         bundles: {
-            connect: {
-                id: 1
+            create: {
+                bundle: {
+                    connect: {
+                        id: 1
+                    }
+                },
+                amount: 1
             }
+        },
+        chips: {
+            create: [
+                {
+                    chip: {
+                        connect: {
+                            id: 1
+                        }
+                    },
+                    amount: 6
+                },
+                {
+                    chip: {
+                        connect: {
+                            id: 2
+                        }
+                    },
+                    amount: 9
+                }
+            ]
         },
         creator: {
             connect: {

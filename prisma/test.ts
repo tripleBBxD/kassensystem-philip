@@ -2,12 +2,14 @@
 import { User } from "@prisma/client";
 import prisma from "../src/lib/prisma/prisma";
 
-const data = await prisma.user.findMany({
+const bundles = await prisma.bundle.findMany({
     include: {
-        transactions: {
+        chips: {
             include: {
-                bundles: {}
+                bundle: true,
+                chip: true
             }
         }
     }
 })
+console.log(bundles[0].chips)

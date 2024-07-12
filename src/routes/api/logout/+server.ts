@@ -10,7 +10,7 @@ export async function PUT({cookies}) {
                 id: +currentUser
             },
             data: {
-                currentSession: 1
+                currentSession: null
             }
         })
     return new Response("Logged out user with id: " + currentUser)

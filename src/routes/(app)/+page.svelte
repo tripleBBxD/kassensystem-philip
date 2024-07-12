@@ -7,7 +7,6 @@
 </script>
 
 <div class="bg-background w-screen h-screen p-4 flex justify-center items-center">
-	<p>Hi</p>
 	<div>
 		<Card>
 			<CardHeader>

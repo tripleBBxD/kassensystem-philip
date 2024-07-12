@@ -11,28 +11,28 @@ datasource db {
 
 model Chip {
   id             Int    @id @default(autoincrement())
+  value          Int    @unique
   price          Int    @unique
-  bundles        Bundle[]
-  transactions   Transaction[]
+  bundles        ChipsInBundle[]
+  transactions   ChipInTransaction[]
 }
 
 model Bundle {
   id             Int    @id @default(autoincrement())
-  name           String @unique
+  name           String
   price          Int
-  chips          Chip[]
-  transactions   Transaction[]
+  chips          ChipsInBundle[]
+  transactions   BundleInTransaction[]
 }
 
 model Transaction {
   id             Int    @id @default(autoincrement())
   creator        User   @relation(fields: [creatorID], references: [id])
-  bundles        Bundle[]
-  chips          Chip[]
+  bundles        BundleInTransaction[]
+  chips          ChipInTransaction[]
   isPurchase     Boolean
   sessionId      Int
   createdAt      DateTime @default(now())
-
   creatorID      Int
 }
 
@@ -43,4 +43,34 @@ model User {
   isAdmin        Boolean
   transactions   Transaction[]
   currentSession Int?
+}
+
+model ChipsInBundle {
+  chip      Chip     @relation(fields: [chipID], references: [id])
+  chipID    Int
+  bundle    Bundle  @relation(fields: [bundleID], references: [id])
+  bundleID  Int
+  amount    Int
+
+  @@id([chipID, bundleID])
+}
+
+model BundleInTransaction {
+  bundle        Bundle       @relation(fields: [bundleID], references: [id])
+  bundleID      Int
+  transaction   Transaction  @relation(fields: [transactionID], references: [id])
+  transactionID Int
+  amount        Int
+
+  @@id([bundleID, transactionID])
+}
+
+model ChipInTransaction {
+  chip          Chip           @relation(fields: [chipID], references: [id])
+  chipID        Int
+  transaction   Transaction  @relation(fields: [transactionID], references: [id])
+  transactionID Int
+  amount        Int
+
+  @@id([chipID, transactionID])
 }

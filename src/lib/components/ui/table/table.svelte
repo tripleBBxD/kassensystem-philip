@@ -8,7 +8,7 @@
 	export { className as class };
 </script>
 
-<div class="relative w-full overflow-auto">
+<div class="relative w-full overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
 	<table class={cn("w-full caption-bottom text-sm", className)} {...$$restProps}>
 		<slot />
 	</table>
