@@ -37,21 +37,21 @@
             <Form.Field {form} name="value" class="flex-row gap-9 items-center table-cell">
                 <Form.Control let:attrs>
                     <Form.Label >Wert</Form.Label>
-                    <Input {...attrs} bind:value={$formData.value} class="border-2 rounded-lg"/>
+                    <Input {...attrs} bind:value={$formData.value} class="border-2 rounded-lg" type="number"/>
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>
             <Form.Field {form} name="price" class="flex-row gap-4 items-center table-cell">
                 <Form.Control let:attrs>
                     <Form.Label>Preis</Form.Label>
-                    <Input {...attrs} bind:value={$formData.price} class="border-2 rounded-lg"/>
+                    <Input {...attrs} bind:value={$formData.price} class="border-2 rounded-lg" type="number"/>
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>
             <Form.Field {form} name="totalAmount" class="flex-row gap-4 items-center table-cell">
                 <Form.Control let:attrs>
                     <Form.Label>Gesamtmenge</Form.Label>
-                    <Input {...attrs} bind:value={$formData.totalAmount} class="border-2 rounded-lg"/>
+                    <Input {...attrs} bind:value={$formData.totalAmount} class="border-2 rounded-lg" type="number"/>
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>

@@ -8,7 +8,7 @@ export async function POST({request}) {
         },
         data: {
             chips: {
-                set: []
+                deleteMany: {}
             }
         },
         include: {
