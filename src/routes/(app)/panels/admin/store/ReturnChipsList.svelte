@@ -25,11 +25,11 @@
 
 
 
-<Card class="flex flex-col justify-stretch h-full w-2/3">
+<Card class="flex flex-col justify-stretch h-full w-2/3 ">
     <CardHeader>
         <CardTitle>Chips zurückgeben</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
         {#if !returnChips}
             <p>Keine Chips vorhanden!</p>
         {:else}

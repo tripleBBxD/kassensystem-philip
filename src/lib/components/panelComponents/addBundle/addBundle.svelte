@@ -51,27 +51,30 @@
 
 <Dialog.Root bind:open>
     <Dialog.Trigger class={buttonVariants({ variant: "outline" }) + buttonClass}>Paket hinzufügen</Dialog.Trigger>
-    <Dialog.Content class={contentClass}>
+
+    <Dialog.Content class={contentClass + "max-h-5/6"}>
         <Dialog.Header>
             <Dialog.Title>Paket hinzufügen</Dialog.Title>
         </Dialog.Header>
+        
             <Label>Name</Label>
         <Input bind:value={name} type="text" >Name</Input>
         <hr>
         <Label>Preis (Bombasten)</Label>
         <Input bind:value={price} type="number" >Price</Input>
         <hr>
-
-        {#each chipsWithCount as chipWithCount, i}
-        <p>Wert: {chipWithCount.chip.value}</p>
-         <div class="flex flex-row align-middle">
-            <Button class="rounded-r-none text-center align-middle" on:click={() => decreaseCount(i)}>-</Button>
-            <div class="flex flex-grow justify-center">
-                <p class=" text-center align-middle m-auto">{chipWithCount.amount}</p>
-            </div>
-            <Button class="rounded-l-none" on:click={() => increaseCount(i)}>+</Button>
+        <div class="overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
+            {#each chipsWithCount as chipWithCount, i}
+            <p>Wert: {chipWithCount.chip.value}</p>
+                <div class="flex flex-row align-middle">
+                <Button class="rounded-r-none text-center align-middle" on:click={() => decreaseCount(i)}>-</Button>
+                <div class="flex flex-grow justify-center">
+                    <p class=" text-center align-middle m-auto">{chipWithCount.amount}</p>
+                </div>
+                <Button class="rounded-l-none" on:click={() => increaseCount(i)}>+</Button>
+                </div>
+            {/each}
          </div>
-        {/each}
     <Dialog.Footer>
         <Button type="submit" on:click={handleSubmit}>Paket Hinzufügen</Button>
     </Dialog.Footer>

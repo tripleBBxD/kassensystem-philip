@@ -2,18 +2,23 @@ import prisma from '$lib/prisma/prisma.js'
 import type { Chip } from '@prisma/client'
 import type { Order } from '../../(app)/panels/admin/store/types.js'
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+const { forEach } = require('p-iteration');
+
 
 
 export async function POST({request, cookies}) {
     const data = await request.json() as Order
 
-    const filteredChips = data.chips?.filter((chip) => {
+    const filteredChips = await data.chips?.filter((chip) => {
         if (chip.amount > 0) {
             return true
         }
     })
 
-    const filteredBundles = data.bundles?.filter((bundle) => {
+    const filteredBundles = await data.bundles?.filter((bundle) => {
         if (bundle.amount > 0) {
             return true
         }
@@ -30,9 +35,12 @@ export async function POST({request, cookies}) {
         }
     }})) || []
 
-    data.bundles?.forEach((bundle) => {
-        bundle.bundle.chips.forEach((chip) => {
-            prisma.chip.update({
+    console.log(filteredBundles)
+
+
+    await filteredBundles?.forEach(async (bundle) => {
+        await bundle.bundle.chips.forEach(async (chip) => {
+            await prisma.chip.update({
                 where: {
                     id: chip.chip.id
                 },
@@ -43,13 +51,13 @@ export async function POST({request, cookies}) {
                 }
 
             })
-            console.log("chipid: " + chip.chip.id)
-            console.log("amount: " + chip.amount)
+            console.log("c amount: " + chip.amount)
+            console.log("b amount: " + bundle.amount)
         })
     })
 
-    data.chips?.forEach((chip) => {
-        prisma.chip.update({
+    await filteredChips?.forEach(async (chip) => {
+        await prisma.chip.update({
             where: {
                 id: chip.chip.id
             },
@@ -61,6 +69,9 @@ export async function POST({request, cookies}) {
 
         })
     })
+
+
+    
 
     const transaction = await prisma.transaction.create({
         data: {
@@ -92,7 +103,7 @@ export async function POST({request, cookies}) {
         }
     })
     
-    console.log(transaction)
+
 
     return Response.json(transaction)
 }

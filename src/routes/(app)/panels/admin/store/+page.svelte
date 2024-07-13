@@ -34,14 +34,29 @@
     }
 </script>
 
-<div class="p-4 flex flex-row gap-4 flex-grow w-full justify-between">
-    <div class="flex flex-row gap-4 w-2/3">
-        <BundleList order={order}/>
-        <ChipsList order={order}/>
+<div class="p-4 flex flex-row gap-4 flex-grow w-full justify-between h-screen">
+    <div class="flex flex-col gap-4 w-2/3 flex-grow">
+        <div class="flex flex-row gap-4 h-full overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
+            <BundleList order={order}/>
+            <ChipsList order={order}/>
+        </div>
+        <div class="justify-end">
+            <Button  on:click={() => {handleSubmit()}}>Kaufen</Button>
+        </div>
+        
     </div>
     <div class="flex flex-grow">
-        <ReturnChipsList returnChips={returnChips}/>
+        
+    </div>
+    <div class="flex flex-col gap-4 w-2/3 flex-grow">
+        <div class="flex flex-row gap-4 h-full overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
+            <ReturnChipsList returnChips={returnChips}/>
+        </div>
+        <div class="justify-end">
+            <Button  on:click={() => {handleSubmit()}}>Zurückgeben</Button>
+        </div>
+        
     </div>
 </div>
 
-<Button class="fixed right-8 bottom-8" on:click={() => {handleSubmit()}}>Kaufen</Button>
+

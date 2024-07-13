@@ -28,7 +28,7 @@
     <CardHeader>
         <CardTitle>Chips</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
         {#if !order.chips}
             <p>Keine Chips vorhanden!</p>
         {:else}
