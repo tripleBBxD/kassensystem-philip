@@ -3,6 +3,7 @@ import type { Chip } from '@prisma/client'
 import type { Order } from '../../(app)/panels/admin/store/types.js'
 
 
+
 export async function POST({request, cookies}) {
     const data = await request.json() as Order
 
@@ -29,7 +30,37 @@ export async function POST({request, cookies}) {
         }
     }})) || []
 
+    data.bundles?.forEach((bundle) => {
+        bundle.bundle.chips.forEach((chip) => {
+            prisma.chip.update({
+                where: {
+                    id: chip.chip.id
+                },
+                data: {
+                    currentAmount: {
+                        decrement: (chip.amount * bundle.amount)
+                    }
+                }
 
+            })
+            console.log("chipid: " + chip.chip.id)
+            console.log("amount: " + chip.amount)
+        })
+    })
+
+    data.chips?.forEach((chip) => {
+        prisma.chip.update({
+            where: {
+                id: chip.chip.id
+            },
+            data: {
+                currentAmount: {
+                    decrement: chip.amount
+                }
+            }
+
+        })
+    })
 
     const transaction = await prisma.transaction.create({
         data: {

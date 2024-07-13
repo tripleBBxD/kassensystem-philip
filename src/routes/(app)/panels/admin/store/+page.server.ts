@@ -15,7 +15,15 @@ async function getUsers() {
 }
 
 async function getBundles() {
-    const bundles = await prisma.bundle.findMany()
+    const bundles = await prisma.bundle.findMany({
+        include: {
+            chips: {
+                include: {
+                    chip: true
+                }
+            }
+        }
+    })
     return bundles
 
 }

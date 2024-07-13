@@ -41,7 +41,7 @@ export const actions = {
             cookies.set("sessionUserID", userData.id.toString(), {path:"/"})
             console.log("Set sessionUserID to " + userData.id.toString())
             if (userData.isAdmin) {
-                redirect(303, "/panels/admin")
+                redirect(303, "/panels/admin/store")
             }
             else {
                 redirect(303, "/panels/user")

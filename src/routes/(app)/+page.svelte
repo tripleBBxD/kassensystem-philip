@@ -20,6 +20,7 @@
 							<Input id="username" name="username" placeholder="Username"/>
 							<Label for="password"></Label>
 							<Input id="password" name="password" placeholder="Passwort"/>
+							<br>
 							<Button type="submit">Anmelden</Button>
 						</div>
 					</div>

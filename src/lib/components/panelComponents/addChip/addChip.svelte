@@ -48,6 +48,13 @@
                 </Form.Control>
                 <Form.FieldErrors />
             </Form.Field>
+            <Form.Field {form} name="totalAmount" class="flex-row gap-4 items-center table-cell">
+                <Form.Control let:attrs>
+                    <Form.Label>Gesamtmenge</Form.Label>
+                    <Input {...attrs} bind:value={$formData.totalAmount} class="border-2 rounded-lg"/>
+                </Form.Control>
+                <Form.FieldErrors />
+            </Form.Field>
             <Form.Button class="dark" on:click={() => {open = false; invalidateAll()}}>Chip hinzufügen</Form.Button>
         </form>
     </Dialog.Content>

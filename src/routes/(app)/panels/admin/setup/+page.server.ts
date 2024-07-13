@@ -70,10 +70,13 @@ export const actions = {
         const data = await request.formData()
         console.log((data.get("price") as string))
         console.log((data.get("value") as string))
+        console.log((data.get("totalAmount") as string))
         await prisma.chip.create({
             data: {
                 price: +(data.get("price") as string),
-                value: +(data.get("value") as string)
+                value: +(data.get("value") as string),
+                totalAmount: +(data.get("totalAmount") as string),
+                currentAmount: +(data.get("totalAmount") as string)
             }
         })
     }

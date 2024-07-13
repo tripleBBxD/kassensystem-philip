@@ -4,14 +4,18 @@ import prisma from "../src/lib/prisma/prisma"
 await prisma.chip.create({
     data: {
         value: 5,
-        price: 5
+        price: 5,
+        totalAmount: 100,
+        currentAmount: 100
     }
 })
 
 await prisma.chip.create({
     data: {
         value: 2,
-        price: 2
+        price: 2,
+        totalAmount: 200,
+        currentAmount: 200
     }
 })
 

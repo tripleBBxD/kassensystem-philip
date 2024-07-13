@@ -6,6 +6,7 @@
 	import ChipsList from "./ChipsList.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { invalidate, invalidateAll } from "$app/navigation";
+	import ReturnChipsList from "./ReturnChipsList.svelte";
 
     export let data: PageServerData
     $: order = {
@@ -19,6 +20,11 @@
         }}),
     }
 
+    $: returnChips = (data.chips.map((chip) => {return {
+            chip: chip,
+            amount: 0
+        }}))
+
     async function handleSubmit() {
         const res = await fetch("/api/transaction", {
             body: JSON.stringify(order),
@@ -29,9 +35,12 @@
 </script>
 
 <div class="p-4 flex flex-row gap-4 flex-grow w-full justify-between">
-    <div class="flex flex-row gap-4 flex-grow">
+    <div class="flex flex-row gap-4 w-2/3">
         <BundleList order={order}/>
         <ChipsList order={order}/>
+    </div>
+    <div class="flex flex-grow">
+        <ReturnChipsList returnChips={returnChips}/>
     </div>
 </div>
 

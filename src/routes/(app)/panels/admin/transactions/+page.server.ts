@@ -1,6 +1,40 @@
-import { validateUser } from "$lib/functions/validateUser"
-import { error } from "@sveltejs/kit"
-import type { PageServerLoad } from "../$types"
+import { error, type Actions, type Cookies } from '@sveltejs/kit';
+import type { PageServerLoad } from "./$types.js";
+import { superValidate } from "sveltekit-superforms";
+
+import { addUserSchema } from '$lib/components/panelComponents/addUser/addUserSchema.js';
+import { zod } from "sveltekit-superforms/adapters";
+import prisma from '$lib/prisma/prisma';
+import { addBundleSchema } from '$lib/components/panelComponents/addBundle/addBundleSchema.js';
+import { z } from 'zod';
+
+import { validateUser } from '$lib/functions/validateUser.js';
+
+async function getTransactions() {
+    return await prisma.transaction.findMany({
+        include: {
+            bundles: {
+                include: {
+                    bundle: {
+                        include: {
+                            chips: {
+                                include: {
+                                    chip: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            chips: {
+                include: {
+                    chip: true
+                }
+            },
+            creator: true
+        }
+    })
+}
 
 export const load: PageServerLoad = async ({cookies}) => {
     const validationData = validateUser(cookies)
@@ -14,6 +48,7 @@ export const load: PageServerLoad = async ({cookies}) => {
         isValidated = true
     }
     return {
+        allTransactions: await getTransactions(),
         isValidated: isValidated
     }
 }
