@@ -18,7 +18,7 @@ export async function validateUser(cookies: Cookies)  {
     const currentuserData = cookies.get("sessionID") || "0"
     console.log("Valid session ID: " + userData?.currentSession)
     return {
-        validated: userData?.currentSession?.toString()==currentuserData && userData.isAdmin,
+        validated: userData?.currentSession?.toString()==currentuserData,
         userName: userData?.name
     }
 }

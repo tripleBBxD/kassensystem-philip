@@ -13,8 +13,12 @@ export async function POST({request}) {
         },
         include: {
             chips: true
+      
+      
         }
     })
+
+    
 
     await prisma.bundle.delete({
         where: {

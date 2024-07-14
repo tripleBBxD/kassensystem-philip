@@ -35,14 +35,18 @@
             <p>Wert: {chip.chip.value} Bombasten</p>
             <div class="flex flex-row align-middle">
             {#if chip.amount === 0}
-            <Button disabled class="rounded-r-none">-</Button>
+            <Button disabled class="rounded-r-none text-center align-middle">-</Button>
             {:else}
             <Button class="rounded-r-none text-center align-middle" on:click={() => decreaseCount(i)}>-</Button>
             {/if}
             <div class="flex flex-grow justify-center">
                 <p class=" text-center align-middle m-auto">{chip.amount}</p>
             </div>
-            <Button class="rounded-l-none" on:click={() => increaseCount(i)}>+</Button>
+            {#if (chip.chip.currentAmount - chip.amount - 1) < 0}
+            <Button disabled class="rounded-l-none text-center align-middle">+</Button>
+            {:else}
+            <Button class="rounded-l-none text-center align-middle" on:click={() => increaseCount(i)}>+</Button>
+            {/if}
             </div>
             <br>
             {/each}

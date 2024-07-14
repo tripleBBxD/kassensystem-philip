@@ -8,7 +8,7 @@ import prisma from '$lib/prisma/prisma';
 import { addBundleSchema } from '$lib/components/panelComponents/addBundle/addBundleSchema.js';
 import { z } from 'zod';
 
-import { validateUser } from '$lib/functions/validateUser.js';
+import { validateUser } from "$lib/functions/validateUser.js"
 
 async function getTransactions() {
     return await prisma.transaction.findMany({
@@ -49,6 +49,7 @@ export const load: PageServerLoad = async ({cookies}) => {
     }
     return {
         allTransactions: await getTransactions(),
-        isValidated: isValidated
+        isValidated: isValidated,
+        sessionID: +(cookies.get("sessionID") as string)
     }
 }

@@ -1,6 +1,6 @@
-import { validateUser } from "$lib/functions/validateUser"
+import { validateUser } from "$lib/functions/validateAdmin"
 import { error, type Actions } from "@sveltejs/kit"
-import type { PageServerLoad } from "../$types"
+import type { PageServerLoad } from "./$types"
 import prisma from "$lib/prisma/prisma"
 import { addUserSchema } from "$lib/components/panelComponents/addUser/addUserSchema"
 import { addChipSchema } from '$lib/components/panelComponents/addChip/addChipSchema.js';

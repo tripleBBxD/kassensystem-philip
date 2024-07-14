@@ -1,6 +1,6 @@
-import { validateUser } from "$lib/functions/validateUser"
+import { validateUser } from "$lib/functions/validateAdmin"
 import { error } from "@sveltejs/kit"
-import type { PageServerLoad } from "../$types"
+import type { PageServerLoad } from "./$types"
 import prisma from "$lib/prisma/prisma"
 
 export const ssr = false;

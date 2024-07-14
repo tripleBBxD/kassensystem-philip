@@ -8,7 +8,7 @@ import prisma from '$lib/prisma/prisma';
 import { addBundleSchema } from '$lib/components/panelComponents/addBundle/addBundleSchema.js';
 import { z } from 'zod';
 
-import { validateUser } from '$lib/functions/validateUser.js';
+import { validateUser } from "$lib/functions/validateAdmin"
 
 async function getTransactions() {
     return await prisma.transaction.findMany({

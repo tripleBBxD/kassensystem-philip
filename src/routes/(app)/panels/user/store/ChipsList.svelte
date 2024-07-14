@@ -1,51 +1,48 @@
 <script lang="ts">
 
-    import type { Order } from "./types"
-    import { Button, buttonVariants } from "$lib/components/ui/button";
-    import {Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle, Content} from "$lib/components/ui/card"    
-	import type { Chip } from "@prisma/client";
-	import type { Writable } from "svelte/store";
+    import type {OrderWritable } from "./types"
+    import { Button } from "$lib/components/ui/button";
+    import {Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle, Content} from "$lib/components/ui/card"
+    
 
     function increaseCount(index: number) {
-        $returnChips[index].amount += 1
-        console.log("increased count")
+        if($order.chips) {
+            $order.chips[index].amount += 1
+            console.log("increased count")
+        }
     }
 
     function decreaseCount(index: number) {
-        $returnChips[index].amount -= 1
-        console.log("decreased count")
+        if($order.chips) {
+            $order.chips[index].amount -= 1
+            console.log("decreased count")
+        }
     }
-
-    type ChipWithAmount = {
-        chip: Chip;
-        amount: number;
-    }
-
-    export let returnChips: Writable<ChipWithAmount[]>
+    export let order: OrderWritable
 </script>
 
 
 
-<Card class="flex flex-col justify-stretch h-full w-full ">
+<Card class="flex flex-col justify-stretch h-full w-1/2">
     <CardHeader>
-        <CardTitle>Chips zurückgeben</CardTitle>
+        <CardTitle>Chips</CardTitle>
     </CardHeader>
     <CardContent class="overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
-        {#if !returnChips}
+        {#if !$order.chips}
             <p>Keine Chips vorhanden!</p>
         {:else}
-            {#each $returnChips as chip, i}
+            {#each $order.chips as chip, i}
             <p>Wert: {chip.chip.value} Bombasten</p>
             <div class="flex flex-row align-middle">
             {#if chip.amount === 0}
-            <Button disabled class="rounded-r-none">-</Button>
+            <Button disabled class="rounded-r-none text-center align-middle">-</Button>
             {:else}
             <Button class="rounded-r-none text-center align-middle" on:click={() => decreaseCount(i)}>-</Button>
             {/if}
             <div class="flex flex-grow justify-center">
                 <p class=" text-center align-middle m-auto">{chip.amount}</p>
             </div>
-            {#if (chip.chip.totalAmount - chip.chip.currentAmount - chip.amount) === 0}
+            {#if (chip.chip.currentAmount - chip.amount - 1) < 0}
             <Button disabled class="rounded-l-none text-center align-middle">+</Button>
             {:else}
             <Button class="rounded-l-none text-center align-middle" on:click={() => increaseCount(i)}>+</Button>

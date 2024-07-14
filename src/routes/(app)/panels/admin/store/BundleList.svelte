@@ -33,14 +33,18 @@
             <p>{bundle.bundle.name}</p>
             <div class="flex flex-row align-middle">
             {#if bundle.amount === 0}
-            <Button disabled class="rounded-r-none">-</Button>
+            <Button disabled class="rounded-r-none text-center align-middle">-</Button>
             {:else}
             <Button class="rounded-r-none text-center align-middle" on:click={() => decreaseCount(i)}>-</Button>
             {/if}
             <div class="flex flex-grow justify-center">
                 <p class=" text-center align-middle m-auto">{bundle.amount}</p>
             </div>
-            <Button class="rounded-l-none" on:click={() => increaseCount(i)}>+</Button>
+            {#if bundle.bundle.chips.map((chip) => {return (chip.chip.currentAmount - (bundle.amount + 1) * chip.amount) >= 0}).includes(false)}
+            <Button disabled class="rounded-l-none text-center align-middle">+</Button>
+            {:else}
+            <Button class="rounded-l-none text-center align-middle" on:click={() => increaseCount(i)}>+</Button>
+            {/if}
             </div>
             <br>
             {/each}

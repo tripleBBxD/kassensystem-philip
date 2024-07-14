@@ -7,6 +7,7 @@
 	import {invalidateAll} from "$app/navigation";
 	import ReturnChipsList from "./ReturnChipsList.svelte";
 	import { writable } from 'svelte/store';
+    import { RotateCcw } from 'lucide-svelte';
 
     export let data: PageServerData
     $: order.set({
@@ -31,10 +32,16 @@
         }}),
     })
 
-    $: returnChips = (data.chips.map((chip) => {return {
-            chip: chip,
-            amount: 0
-        }}))
+    $: returnChips.set(data.chips.map((chip) => {return {
+        chip: chip,
+        amount: 0
+    }}))
+
+    let returnChips = writable(data.chips.map((chip) => {return {
+        chip: chip,
+        amount: 0
+    }}))
+
     async function handleSubmit() {
         const res = await fetch("/api/transaction", {
             body: JSON.stringify($order),
@@ -44,23 +51,30 @@
     }
 
     async function handleReturnChips() {
-        
+        const res = await fetch("/api/returnChips", {
+            body: JSON.stringify($returnChips),
+            method: "POST"
+        })
+        invalidateAll()
     }
+
+    let returnPrice = writable(0)
+    $: returnPrice.set($returnChips.map((chip) => chip.chip.value * chip.amount).reduce((acc, val) => acc + val, 0) )
     
     let price = writable(0)
     $: price.set($order.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0) + $order.chips?.map((chip) => chip.chip.value * chip.amount).reduce((acc, val) => acc + val, 0) )
 </script>
 
-<div class="p-4 flex flex-row gap-4 flex-grow w-full justify-between h-screen">
+<div class="p-4 flex flex-row gap-2 flex-grow w-full justify-between h-screen">
     <div class="flex flex-col gap-4 w-2/3 flex-grow">
         <div class="flex flex-row gap-4 h-full overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
             <BundleList order={order}/>
             <ChipsList order={order}/>
         </div>
-        <div class="justify-between flex flex-row pr-2 align-middle">
+        <div class="justify-between flex flex-row align-middle">
             <div class="flex flex-row gap-4">
                 <Button  on:click={() => {handleSubmit()}}>Kaufen</Button>
-                <Button  on:click={invalidateAll}>Zurücksetzen</Button>
+                <Button  on:click={invalidateAll}><RotateCcw /></Button>
             </div>
             <div class="border align-middle flex justify-center rounded-md px-4 items-center">
                 <p>{$price} Bombasten</p>
@@ -72,15 +86,20 @@
     <div class="flex flex-grow">
         
     </div>
-    <div class="flex flex-col gap-4 w-2/3 flex-grow">
-        <div class="flex flex-row gap-4 h-full overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
+    <div class="flex flex-col gap-4 w-1/3 flex-grow">
+        <div class="flex flex-row gap-4 h-full overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground w-full">
             <ReturnChipsList returnChips={returnChips}/>
         </div>
-        <div class="justify-end">
-            <Button  on:click={() => {handleReturnChips()}}>Zurückgeben</Button>
+        <div class="justify-between flex flex-row align-middle">
+            <div class="flex flex-row gap-4">
+                <Button  on:click={() => {handleReturnChips()}}>Zurückgeben</Button>
+                <Button  on:click={invalidateAll}><RotateCcw /></Button>
+            </div>
+            <div class="border align-middle flex justify-center rounded-md px-4 items-center">
+                <p>{$returnPrice} Bombasten</p>
+            </div>
             
         </div>
-        
     </div>
 </div>
 

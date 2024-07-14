@@ -10,29 +10,32 @@ const { forEach } = require('p-iteration');
 
 
 export async function POST({request, cookies}) {
-    const data = await request.json() as Order
+    const data = await request.json() as {chip: Chip, amount: number}[]
 
-    const filteredChips = data.chips?.filter((chip) => {
+    const filteredChips = data.filter((chip) => {
         if (chip.amount > 0) {
             return true
         }
     })
+    console.log(filteredChips)
 
     const createChips = filteredChips?.map((oneChip) => ({amount: oneChip.amount, chip: {
         connect: {
             id: oneChip.chip.id
         }
     }})) || []
+    console.log("CC:")
+    console.log( createChips)
     
 
-    await data.chips?.forEach(async (chip) => {
+    await data.forEach(async (chip) => {
         await prisma.chip.update({
             where: {
                 id: chip.chip.id
             },
             data: {
                 currentAmount: {
-                    decrement: chip.amount
+                    increment: chip.amount
                 }
             }
 
@@ -46,26 +49,19 @@ export async function POST({request, cookies}) {
 
     const transaction = await prisma.transaction.create({
         data: {
-            isPurchase: true,
+            isPurchase: false,
+            isDeleted: false,
             sessionId: +(cookies.get("sessionID") as string),
             creator: {
                 connect: {
                     id: +(cookies.get("sessionUserID") as string)
                 }
             },
-            bundles: {
-                create: createBundle
-            },
             chips: {
                 create: createChips
             },
         },
         include: {
-            bundles: {
-                include: {
-                    bundle: true
-                }
-            },
             chips: {
                 include: {
                     chip: true
