@@ -1,7 +1,12 @@
 import type { Chip } from "@prisma/client";
 import type { Bundle } from "@prisma/client";
+import type { Writable } from "svelte/store";
 import { number } from "zod";
 
+export type OrderWritable = Writable<{
+    chips?: {chip: Chip, amount: number}[]
+    bundles?: {bundle: BundleWithChips, amount: number}[]
+}>
 export type Order = {
     chips?: {chip: Chip, amount: number}[]
     bundles?: {bundle: BundleWithChips, amount: number}[]

@@ -1,26 +1,24 @@
 <script lang="ts">
 
-    import type { Order } from "./types"
-    import { Button, buttonVariants } from "$lib/components/ui/button";
+    import type { OrderWritable } from "./types"
+    import { Button } from "$lib/components/ui/button";
     import {Card, CardContent, CardDescription, CardHeader, CardFooter, CardTitle, Content} from "$lib/components/ui/card"
-	import type { Bundle, Chip } from "@prisma/client";
-    import BentoGrid from "$lib/components/ui/BentoGrid/BentoGrid.svelte";
     
 
     function increaseCount(index: number) {
-        if(order.bundles) {
-            order.bundles[index].amount += 1
-            console.log("increased count")
+        if($order.bundles) {
+            $order.bundles[index].amount += 1
+            console.log($order.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0))
         }
     }
 
     function decreaseCount(index: number) {
-        if(order.bundles) {
-            order.bundles[index].amount -= 1
-            console.log("decreased count")
+        if($order.bundles) {
+            $order.bundles[index].amount -= 1
+            console.log($order.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0))
         }
     }
-    export let order: Order
+    export let order: OrderWritable
 </script>
 
 <Card class="flex flex-col justify-stretch h-full  w-1/2">
@@ -28,10 +26,10 @@
         <CardTitle>Pakete</CardTitle>
     </CardHeader>
     <CardContent class="overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-secondary active:scrollbar-thumb-foreground">
-        {#if !order.bundles}
+        {#if !$order.bundles}
             <p>Keine Pakete vorhanden!</p>
         {:else}
-            {#each order.bundles as bundle, i}
+            {#each $order.bundles as bundle, i}
             <p>{bundle.bundle.name}</p>
             <div class="flex flex-row align-middle">
             {#if bundle.amount === 0}

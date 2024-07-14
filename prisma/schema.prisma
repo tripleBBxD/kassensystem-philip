@@ -33,6 +33,7 @@ model Transaction {
   bundles        BundleInTransaction[]
   chips          ChipInTransaction[]
   isPurchase     Boolean
+  isDeleted      Boolean
   sessionId      Int
   createdAt      DateTime @default(now())
   creatorID      Int
@@ -42,7 +43,7 @@ model User {
   id             Int    @id @default(autoincrement())
   name           String @unique
   password       String
-  isAdmin        Boolean
+  isAdmin        Boolean @default(false)
   transactions   Transaction[]
   currentSession Int?
 }

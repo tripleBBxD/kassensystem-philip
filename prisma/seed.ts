@@ -64,6 +64,7 @@ await prisma.transaction.create({
     data: {
         isPurchase: true,
         sessionId: 1234,
+        isDeleted: false,
         bundles: {
             create: {
                 bundle: {

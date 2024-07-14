@@ -35,7 +35,7 @@
 		"tailwind-scrollbar": "^3.1.0",
 		"tailwindcss": "^3.4.4",
 		"tslib": "^2.4.1",
-		"tsx": "^4.15.5",
+		"tsx": "^4.16.2",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.0.0-alpha.20",
 		"vite": "^5.0.3",
@@ -43,12 +43,19 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@pdfme/common": "^4.0.2",
+		"@pdfme/generator": "^4.0.2",
+		"@pdfme/schemas": "^4.0.2",
+		"@pdfme/ui": "^3.2.1",
 		"bits-ui": "^0.21.10",
 		"clsx": "^2.1.1",
 		"formsnap": "^1.0.1",
+		"jspdf": "^2.5.1",
+		"jspdf-autotable": "^3.8.2",
 		"lucide-svelte": "^0.395.0",
 		"mode-watcher": "^0.3.0",
 		"p-iteration": "^1.1.8",
+		"pdfmake": "^0.2.10",
 		"sqlite3": "^5.1.7",
 		"svelte-motion": "^0.12.2",
 		"svelte-sonner": "^0.3.24",
@@ -58,5 +65,9 @@
 	},
 	"compilerOptions": {
 		"esModuleInterop": true
-	}
+	},
+	"prisma:inline": "cp ./node_modules/.prisma/client/*.js ./node_modules/@prisma/client",
+	"prisma:migrate": "prisma migrate deploy && npm run prisma:inline",
+	"prisma:migrate:dev": "prisma migrate dev && npm run prisma:inline",
+	"prisma:generate": "prisma generate && npm run prisma:inline"
 }

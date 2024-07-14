@@ -2,9 +2,10 @@
 	import type { PageServerData } from "./$types";
     import * as Table from "$lib/components/ui/table";
     export let data: PageServerData
-    import type { Chip } from "$lib/types/chip";
+
     import { Trash } from 'lucide-svelte';
 	import DeleteChip from "./deleteChip.svelte";
+	import type { Chip } from "@prisma/client";
 
     function sortChips(chips: Chip[]) {
         return chips.sort((a, b) => a.value - b.value)
@@ -17,6 +18,8 @@
         <Table.Row>
             <Table.Head>Wert</Table.Head>
             <Table.Head>Preis (Bombasten)</Table.Head>
+            <Table.Head>Gesamtmenge</Table.Head>
+            <Table.Head>Aktuelle Menge</Table.Head>
             <Table.Head>Löschen</Table.Head>
         </Table.Row>
     </Table.Header>
@@ -25,6 +28,8 @@
             <Table.Row>
                 <Table.Cell>{chip.value}</Table.Cell>
                 <Table.Cell>{chip.price}</Table.Cell>
+                <Table.Cell>{chip.totalAmount}</Table.Cell>
+                <Table.Cell>{chip.currentAmount}</Table.Cell>
                 <Table.Cell>
                     <DeleteChip id={chip.id}/>
                 </Table.Cell>

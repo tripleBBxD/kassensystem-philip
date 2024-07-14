@@ -75,6 +75,7 @@ export async function POST({request, cookies}) {
 
     const transaction = await prisma.transaction.create({
         data: {
+            isDeleted: false,
             isPurchase: true,
             sessionId: +(cookies.get("sessionID") as string),
             creator: {

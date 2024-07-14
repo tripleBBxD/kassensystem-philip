@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma/prisma.js'
 import type { Chip } from '@prisma/client'
-import * as fs from "fs"
+
 
 type incomingData = {
     name: string,
