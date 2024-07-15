@@ -5,31 +5,27 @@
 
     import { Trash } from 'lucide-svelte';
 	import DeleteChip from "./deleteChip.svelte";
-	import type { Chip } from "@prisma/client";
+	import type { Product } from "@prisma/client";
 
-    function sortChips(chips: Chip[]) {
-        return chips.sort((a, b) => a.value - b.value)
+    function sortChips(chips: Product[]) {
+        return chips.sort((a, b) => a.name.localeCompare(b.name))
     }
 
 </script>
 <Table.Root>
-    <Table.Caption>Liste aller Chips</Table.Caption>
+    <Table.Caption>Liste aller Produkte</Table.Caption>
     <Table.Header>
         <Table.Row>
-            <Table.Head>Wert</Table.Head>
+            <Table.Head>Name</Table.Head>
             <Table.Head>Preis (Bombasten)</Table.Head>
-            <Table.Head>Gesamtmenge</Table.Head>
-            <Table.Head>Aktuelle Menge</Table.Head>
             <Table.Head>Löschen</Table.Head>
         </Table.Row>
     </Table.Header>
     <Table.Body>
-        {#each sortChips(data.chips) as chip}
+        {#each sortChips(data.products) as chip}
             <Table.Row>
-                <Table.Cell>{chip.value}</Table.Cell>
+                <Table.Cell>{chip.name}</Table.Cell>
                 <Table.Cell>{chip.price}</Table.Cell>
-                <Table.Cell>{chip.totalAmount}</Table.Cell>
-                <Table.Cell>{chip.currentAmount}</Table.Cell>
                 <Table.Cell>
                     <DeleteChip id={chip.id}/>
                 </Table.Cell>

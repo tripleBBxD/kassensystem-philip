@@ -10,14 +10,3 @@ await prisma.user.createMany({
     }
     ]
 })
-
-await prisma.product.createMany({
-    data: [{
-        name: "Cola",
-        price: 200,
-    },
-    {
-        name: "Fanta",
-        price: 150
-    }]
-})

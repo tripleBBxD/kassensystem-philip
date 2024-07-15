@@ -8,8 +8,8 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
     
 
-async function getChips() {
-    const chips = await prisma.chip.findMany()
+async function getProducts() {
+    const chips = await prisma.product.findMany()
     return chips
 }
 
@@ -17,19 +17,6 @@ async function getUsers() {
     return await prisma.user.findMany()
 }
 
-async function getBundles() {
-    const bundles = await prisma.bundle.findMany({
-        include: {
-            chips: {
-                include: {
-                    chip: true,
-                }
-            }
-        }
-    })
-    return bundles
-
-}
 
 export const load: PageServerLoad = async ({cookies}) => {
     const validationData = validateUser(cookies)
@@ -46,9 +33,8 @@ export const load: PageServerLoad = async ({cookies}) => {
     
     return {
         isValidated: isValidated,
-        chips: await getChips(),
+        products: await getProducts(),
         users: await getUsers(),
-        bundles: await getBundles(),
         addChipSchema: await superValidate(zod(addChipSchema)),
         addUserSchema: await superValidate(zod(addUserSchema)),
     }
@@ -68,15 +54,10 @@ export const actions = {
     addChip: async ({request}) => {
 
         const data = await request.formData()
-        console.log((data.get("price") as string))
-        console.log((data.get("value") as string))
-        console.log((data.get("totalAmount") as string))
-        await prisma.chip.create({
+        await prisma.product.create({
             data: {
                 price: +(data.get("price") as string),
-                value: +(data.get("value") as string),
-                totalAmount: +(data.get("totalAmount") as string),
-                currentAmount: +(data.get("totalAmount") as string)
+                name: (data.get("name") as string),
             }
         })
     }

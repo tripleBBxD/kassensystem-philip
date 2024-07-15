@@ -4,11 +4,16 @@
 	import * as FileSaver from 'file-saver';
     import * as XLSX from 'xlsx';
 	import type { AllTransactions } from "./+page.svelte";
+	import Input from '$lib/components/ui/input/input.svelte';
+	import type { Product } from '@prisma/client';
 
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
 
     export let transactions: AllTransactions
+
+    let day: number
+    let product: Product
 
     function invert(number: number, inverted: boolean) {
         if (inverted) {
@@ -20,18 +25,13 @@
     }
 
     function getTurnover(day: number) {
+
         return transactions
-            .filter((transaction) => transaction.createdAt.getDay() === day && transaction.isPurchase)
-            .map((transaction) => transaction.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0) + transaction.chips?.map((chip) => chip.chip.value * chip.amount).reduce((acc, val) => acc + val, 0))
+            .filter((transaction) => transaction.createdAt.getDate() == day)
+            .map((transaction) => transaction.products?.map((bundle) => bundle.product.price * bundle.amount)
+            .reduce((acc, val) => acc + val, 0))
             .reduce((acc, val) => acc + val , 0)
 
-    }
-
-    function getExpenses(day: number) {
-        return transactions
-            .filter((transaction) => transaction.createdAt.getDay() === day && !transaction.isPurchase)
-            .map((transaction) => transaction.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0) + transaction.chips?.map((chip) => chip.chip.value * chip.amount).reduce((acc, val) => acc + val, 0))
-            .reduce((acc, val) => acc + val , 0)
     }
     
 
@@ -40,27 +40,24 @@
     }
     function generateExcelAndSave() {
 
+
         transactions.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
-        let transactionsAOA: String[][] = transactions.filter((transactions) => !transactions.isDeleted).map((transaction) => {
+        console.log(day)
+        let transactionsAOA: String[][] = transactions.filter((transaction) => transaction.createdAt.getDate() === day).map((transaction) => {
             return [
-                ((transaction.isPurchase ? "" : "-") + (+transaction.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0) + +transaction.chips?.map((chip) => chip.chip.value * chip.amount).reduce((acc, val) => acc + val, 0))).toString(),
-                transaction.bundles.map((bundle) =>  (bundle.bundle.name + " x" + bundle.amount.toString())).join(", ") || "-",
-                transaction.chips.map((chip) =>  (chip.chip.value + " x" + chip.amount.toString())).join(", ") || "-",
-                transaction.isPurchase ? "Einzahlung": "Abbuchung",
+                transaction.products?.map((bundle) => bundle.product.price * bundle.amount).reduce((acc, val) => acc + val, 0).toString(),
+                transaction.products.map((bundle) =>  (bundle.product.name + " x" + bundle.amount.toString())).join(", ") || "-",
                 getDateFormatted(transaction.createdAt)
             ] 
         })
-        transactionsAOA.unshift(["Preis", "Pakete", "Chips", "Art", "Datum"])
+        transactionsAOA.unshift(["Preis", "Produkte", "Datum"])
 
         let profitAOA: String[][] = [
-            ["Tag", "Kosten", "Umsatz", "Gewinn"],
-            ["14.07", getExpenses(14).toString() || "-", getTurnover(14).toString() || "-", (getTurnover(14) - getExpenses(14)).toString()]  || "-",
-            ["15.07", getExpenses(15).toString() || "-", getTurnover(15).toString() || "-", (getTurnover(15) - getExpenses(15)).toString()]  || "-",
-            ["16.07", getExpenses(16).toString() || "-", getTurnover(16).toString() || "-", (getTurnover(16) - getExpenses(16)).toString()]  || "-",
-            ["17.07", getExpenses(17).toString() || "-", getTurnover(17).toString() || "-", (getTurnover(17) - getExpenses(17)).toString()]  || "-",
-            ["18.07", getExpenses(18).toString() || "-", getTurnover(18).toString() || "-", (getTurnover(18) - getExpenses(18)).toString()]  || "-",
-            ["19.07", getExpenses(19).toString() || "-", getTurnover(19).toString() || "-", (getTurnover(19) - getExpenses(19)).toString()]  || "-",
+            ["Tag", "Umsatz"],
+            [ day + ".07", getTurnover(day).toString() || "-"]  || "-",
         ]
+
+        let productAOA: String[][] = []
 
         const transactionsSheet = XLSX.utils.aoa_to_sheet(transactionsAOA)
         const profitSheet = XLSX.utils.aoa_to_sheet(profitAOA)
@@ -70,7 +67,9 @@
         FileSaver.saveAs(data, "Transaktionen" + fileExtension);
     }
 </script>
-
-<Button on:click={generateExcelAndSave}>
-    Excel generieren
-</Button>
+<div class="flex flex-row gap-4">  
+    <Button on:click={generateExcelAndSave}>
+        Excel generieren
+    </Button>
+    <Input bind:value={day} type="number" placeholder="Tag"></Input>
+</div>

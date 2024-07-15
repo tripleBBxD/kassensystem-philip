@@ -9,9 +9,6 @@
     export let data: PageServerData
 	import UserTable from './UserTable.svelte';
 	import AddBundle from '$lib/components/panelComponents/addBundle/addBundle.svelte';
-	import BundleTable from './BundleTable.svelte';
-
-
 
 </script>
 
@@ -23,10 +20,6 @@
     <div class="flex flex-col px-2 gap-2">
         <AddUser data={data.addUserSchema} buttonClass=""/>
         <UserTable data={data}/>
-    </div>
-    <div class="flex flex-col px-2 gap-2">
-        <AddBundle allChips={data.chips}/>
-        <BundleTable data={data}/>
     </div>
 </div>
 <Toaster />

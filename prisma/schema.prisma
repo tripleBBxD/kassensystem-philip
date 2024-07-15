@@ -9,34 +9,22 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Chip {
+model Product {
   id             Int    @id @default(autoincrement())
-  value          Int    @unique
-  price          Int    @unique
-  totalAmount    Int
-  currentAmount  Int
-  bundles        ChipsInBundle[]
-  transactions   ChipInTransaction[]
+  name          String @unique
+  price          Int
+  transactions   ProductInTransaction[]
 }
 
-model Bundle {
-  id             Int    @id @default(autoincrement())
-  name           String
-  price          Int
-  chips          ChipsInBundle[]
-  transactions   BundleInTransaction[]
-}
 
 model Transaction {
   id             Int    @id @default(autoincrement())
   creator        User   @relation(fields: [creatorID], references: [id])
-  bundles        BundleInTransaction[]
-  chips          ChipInTransaction[]
-  isPurchase     Boolean
-  isDeleted      Boolean
+  products       ProductInTransaction[]
   sessionId      Int
   createdAt      DateTime @default(now())
   creatorID      Int
+  price          Int
 }
 
 model User {
@@ -48,32 +36,13 @@ model User {
   currentSession Int?
 }
 
-model ChipsInBundle {
-  chip      Chip     @relation(fields: [chipID], references: [id])
-  chipID    Int
-  bundle    Bundle  @relation(fields: [bundleID], references: [id])
-  bundleID  Int
-  amount    Int
 
-  @@id([chipID, bundleID])
-}
-
-model BundleInTransaction {
-  bundle        Bundle       @relation(fields: [bundleID], references: [id])
-  bundleID      Int
+model ProductInTransaction {
+  product       Product      @relation(fields: [productID], references: [id])
+  productID     Int
   transaction   Transaction  @relation(fields: [transactionID], references: [id])
   transactionID Int
   amount        Int
 
-  @@id([bundleID, transactionID])
-}
-
-model ChipInTransaction {
-  chip          Chip           @relation(fields: [chipID], references: [id])
-  chipID        Int
-  transaction   Transaction  @relation(fields: [transactionID], references: [id])
-  transactionID Int
-  amount        Int
-
-  @@id([chipID, transactionID])
+  @@id([productID, transactionID])
 }

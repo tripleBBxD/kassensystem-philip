@@ -13,24 +13,7 @@ import { validateUser } from "$lib/functions/validateAdmin"
 async function getTransactions() {
     return await prisma.transaction.findMany({
         include: {
-            bundles: {
-                include: {
-                    bundle: {
-                        include: {
-                            chips: {
-                                include: {
-                                    chip: true
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            chips: {
-                include: {
-                    chip: true
-                }
-            },
+            products: {include: {product: true}},
             creator: true
         }
     })

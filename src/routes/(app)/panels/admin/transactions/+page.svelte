@@ -14,7 +14,7 @@
 
     type AllTransactions = typeof data.allTransactions
 
-    let transactions: AllTransactions
+    let transactions
 
     $: transactions = data.allTransactions.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
 
@@ -36,32 +36,23 @@
         </Table.Caption>
         <Table.Header>
             <Table.Head>Durchgeführt von</Table.Head>
-            <Table.Head>Erstellt am</Table.Head>
+            <Table.Head>Durchgeführt am</Table.Head>
             <Table.Head>Preis</Table.Head>
-            <Table.Head>Pakete</Table.Head>
-            <Table.Head>Chips</Table.Head>
-            <Table.Head>Art</Table.Head>
-            <Table.Head>Gelöscht?</Table.Head>
+            <Table.Head>Produkte</Table.Head>
         </Table.Header>
         <Table.Body>
             {#each (transactions) as transaction}
                 <Table.Row>
                     <Table.Cell>{transaction.creator.name}</Table.Cell>
                     <Table.Cell>{getDateFormatted(new Date(transaction.createdAt))}</Table.Cell>
-                    <Table.Cell>{transaction.isPurchase ? "": "-"}{
-                            transaction.bundles?.map((bundle) => bundle.bundle.price * bundle.amount).reduce((acc, val) => acc + val, 0) + transaction.chips?.map((chip) => chip.chip.value * chip.amount).reduce((acc, val) => acc + val, 0) 
+                    <Table.Cell>{
+                            transaction.price
                         } Bombasten
                     </Table.Cell>
-                    <Table.Cell>{transaction.bundles.map((bundle) => {
-                            return bundle.bundle.name + " x" + bundle.amount.toString()
+                    <Table.Cell>{transaction.products.map((product) => {
+                            return product.product.name + " x" + product.amount.toString()
                         }).join(", ") || "-"}
                     </Table.Cell>
-                    <Table.Cell>{transaction.chips.map((chip) => {
-                            return chip.chip.value + " x" + chip.amount.toString()
-                        }).join(", ") || "-"}
-                    </Table.Cell>
-                    <Table.Cell>{transaction.isPurchase ? "Einzahlung": "Abbuchung"}</Table.Cell>
-                    <Table.Cell>{transaction.isDeleted ? "Ja": "Nein"}</Table.Cell>
                     <!-- <Table.Cell><DeleteTransaction id={transaction.id}/></Table.Cell> -->
                 </Table.Row>
             {/each}

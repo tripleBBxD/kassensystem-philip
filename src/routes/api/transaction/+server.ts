@@ -1,5 +1,5 @@
 import prisma from '$lib/prisma/prisma.js'
-import type { Chip } from '@prisma/client'
+import type { Product } from '@prisma/client'
 import type { Order } from '../../(app)/panels/admin/store/types.js'
 
 import { createRequire } from 'module';
@@ -12,99 +12,39 @@ const { forEach } = require('p-iteration');
 export async function POST({request, cookies}) {
     const data = await request.json() as Order
 
-    const filteredChips = await data.chips?.filter((chip) => {
+    const filteredChips = await data?.filter((chip) => {
         if (chip.amount > 0) {
             return true
         }
     })
 
-    const filteredBundles = await data.bundles?.filter((bundle) => {
-        if (bundle.amount > 0) {
-            return true
-        }
-    })
-    const createChips = filteredChips?.map((oneChip) => ({amount: oneChip.amount, chip: {
+    const createChips = filteredChips?.map((oneChip) => ({amount: oneChip.amount, product: {
         connect: {
-            id: oneChip.chip.id
+            id: oneChip.product.id
         }
     }})) || []
-    
-    const createBundle = filteredBundles?.map((oneBundle) => ({amount: oneBundle.amount, bundle: {
-        connect: {
-            id: oneBundle.bundle.id
-        }
-    }})) || []
-
-    console.log(filteredBundles)
-
-
-    await filteredBundles?.forEach(async (bundle) => {
-        await bundle.bundle.chips.forEach(async (chip) => {
-            await prisma.chip.update({
-                where: {
-                    id: chip.chip.id
-                },
-                data: {
-                    currentAmount: {
-                        decrement: (chip.amount * bundle.amount)
-                    }
-                }
-
-            })
-            console.log("c amount: " + chip.amount)
-            console.log("b amount: " + bundle.amount)
-        })
-    })
-
-    await filteredChips?.forEach(async (chip) => {
-        await prisma.chip.update({
-            where: {
-                id: chip.chip.id
-            },
-            data: {
-                currentAmount: {
-                    decrement: chip.amount
-                }
-            }
-
-        })
-    })
-
-
-    
 
     const transaction = await prisma.transaction.create({
         data: {
-            isDeleted: false,
-            isPurchase: true,
+            price: filteredChips.map((product) => product.product.price * product.amount).reduce((acc, val) => acc + val, 0),
             sessionId: +(cookies.get("sessionID") as string),
             creator: {
                 connect: {
                     id: +(cookies.get("sessionUserID") as string)
                 }
             },
-            bundles: {
-                create: createBundle
-            },
-            chips: {
+            products: {
                 create: createChips
-            },
+            }
         },
         include: {
-            bundles: {
+            products: {
                 include: {
-                    bundle: true
-                }
-            },
-            chips: {
-                include: {
-                    chip: true
+                    product: true
                 }
             }
         }
     })
-    
-
 
     return Response.json(transaction)
 }

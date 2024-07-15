@@ -19,7 +19,7 @@
 							<Label for="username"></Label>
 							<Input id="username" name="username" placeholder="Username"/>
 							<Label for="password"></Label>
-							<Input id="password" name="password" placeholder="Passwort"/>
+							<Input id="password" name="password" placeholder="Passwort" type="password"/>
 							<br>
 							<Button type="submit">Anmelden</Button>
 						</div>

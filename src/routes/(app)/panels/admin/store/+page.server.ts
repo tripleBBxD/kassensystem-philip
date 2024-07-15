@@ -5,27 +5,13 @@ import prisma from "$lib/prisma/prisma"
 
 export const ssr = false;
 
-async function getChips() {
-    const chips = await prisma.chip.findMany()
-    return chips
+async function getProucts() {
+    const products = await prisma.product.findMany()
+    return products
 }
 
 async function getUsers() {
     return await prisma.user.findMany()
-}
-
-async function getBundles() {
-    const bundles = await prisma.bundle.findMany({
-        include: {
-            chips: {
-                include: {
-                    chip: true
-                }
-            }
-        }
-    })
-    return bundles
-
 }
 
 export const load: PageServerLoad = async ({cookies}) => {
@@ -42,8 +28,7 @@ export const load: PageServerLoad = async ({cookies}) => {
     }
     return {
         isValidated: isValidated,
-        chips: await getChips(),
+        products: await getProucts(),
         users: await getUsers(),
-        bundles: await getBundles(),
     }
 }
