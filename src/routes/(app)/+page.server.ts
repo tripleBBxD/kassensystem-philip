@@ -44,7 +44,7 @@ export const actions = {
                 redirect(303, "/panels/admin/store")
             }
             else {
-                redirect(303, "/panels/user")
+                redirect(303, "/panels/user/store")
             }
         }
     }

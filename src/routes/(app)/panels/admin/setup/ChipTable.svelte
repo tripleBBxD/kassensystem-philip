@@ -6,6 +6,7 @@
     import { Trash } from 'lucide-svelte';
 	import DeleteChip from "./deleteChip.svelte";
 	import type { Product } from "@prisma/client";
+	import EditProduct from "./EditProduct.svelte";
 
     function sortChips(chips: Product[]) {
         return chips.sort((a, b) => a.name.localeCompare(b.name))
@@ -18,7 +19,7 @@
         <Table.Row>
             <Table.Head>Name</Table.Head>
             <Table.Head>Preis (Bombasten)</Table.Head>
-            <Table.Head>Löschen</Table.Head>
+            <Table.Head>Aktionen</Table.Head>
         </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -26,8 +27,9 @@
             <Table.Row>
                 <Table.Cell>{chip.name}</Table.Cell>
                 <Table.Cell>{chip.price}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell class="flex flex-row gap-4">
                     <DeleteChip id={chip.id}/>
+                    <EditProduct data={data.addChipSchema} product={chip}/>
                 </Table.Cell>
             </Table.Row>
         {/each}

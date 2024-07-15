@@ -19,6 +19,26 @@ async function getTransactions() {
     })
 }
 
+async function getProducts() {
+    return await prisma.product.findMany({
+        include: {
+            transactions: {
+                include: {
+                    transaction: {
+                        include: {
+                            products: {
+                                include: {
+                                    product: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    })
+}
+
 export const load: PageServerLoad = async ({cookies}) => {
     const validationData = validateUser(cookies)
     let isValidated = false
@@ -32,6 +52,7 @@ export const load: PageServerLoad = async ({cookies}) => {
     }
     return {
         allTransactions: await getTransactions(),
+        productsWithTransactions: await getProducts(),
         isValidated: isValidated
     }
 }

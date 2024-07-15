@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
     export let data: PageData
     export type AllTransactions = typeof data.allTransactions
+    export type ProductsWithTransactions = typeof data.productsWithTransactions
 </script>
 
 <script lang="ts">
@@ -9,10 +10,8 @@
     import * as Table from "$lib/components/ui/table";
 	import DeleteTransaction from './DeleteTransaction.svelte';
 
-
     export let data: PageData
 
-    type AllTransactions = typeof data.allTransactions
 
     let transactions
 
@@ -23,11 +22,10 @@
     }
 
 
-
 </script>
 <div class="flex flex-col p-4 gap-4 w-full">
     <div>
-        <PrintButton transactions={data.allTransactions}/>
+        <PrintButton transactionsData={data.allTransactions} productsWithTransactions={data.productsWithTransactions}/>
     </div>
 
     <Table.Root>

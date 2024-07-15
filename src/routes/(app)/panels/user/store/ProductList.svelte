@@ -29,10 +29,10 @@
     </CardHeader>
     <CardContent class="overflow-y-auto scrollbar-track-transparent scrollbar scrollbar-thumb-foreground">
         {#if !$order}
-            <p class="pb-2">Keine Produkte vorhanden!</p>
+            <p>Keine Produkte vorhanden!</p>
         {:else}
             {#each $order as product, i}
-            <p class="pb-2">{product.product.name}</p>
+            <p class="pt-2">{product.product.name}</p>
             <div class="flex flex-row align-middle">
             {#if product.amount === 0}
             <Button disabled class="rounded-r-none text-center align-middle">-</Button>

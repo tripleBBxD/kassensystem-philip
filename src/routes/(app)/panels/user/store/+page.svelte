@@ -8,6 +8,7 @@
     import { RotateCcw } from 'lucide-svelte';
 	import type { Order } from "./types";
 	import type { PageServerData } from "./$types";
+	import Input from "$lib/components/ui/input/input.svelte";
 
     export let data: PageServerData
     $: order.set(data.products.map((product) => {
@@ -33,6 +34,8 @@
         invalidateAll()
     }
 
+    let priceOffset = 0
+
     
     let price = writable(0)
     $: price.set($order.map((product) => product.product.price * product.amount).reduce((acc, val) => acc + val, 0))
@@ -48,7 +51,7 @@
                 <Button  on:click={() => {handleSubmit()}}>Kaufen</Button>
                 <Button  on:click={invalidateAll}><RotateCcw /></Button>
             </div>
-            <div class="border align-middle flex justify-center rounded-md px-4 items-center">
+            <div class="border align-middle flex flex-row gap-4 justify-center rounded-md px-4 items-center">
                 <p>{$price} Bombasten</p>
             </div>
             
