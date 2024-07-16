@@ -8,24 +8,38 @@
 	import PrintButton from './PrintButton.svelte';
 	import type { PageData } from "./$types";
     import * as Table from "$lib/components/ui/table";
-	import DeleteTransaction from './DeleteTransaction.svelte';
+	import { writable } from 'svelte/store';
 
     export let data: PageData
+
+    let day = writable((new Date()).getDate())
 
 
     let transactions
 
-    $: transactions = data.allTransactions.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
-
+    $: transactions = data.allTransactions
+                                .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+                                .filter((transaction) => {
+                                                if (transaction.createdAt.getDate() == $day ) {
+                                                    console.log("a")
+                                                    return true
+                                                }
+                                                else {
+                                                    console.log("b")
+                                                    return false
+                                                }
+                                            })
+                                    
     function getDateFormatted(date: Date) {
         return date.toLocaleString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hour12: false, minute:'2-digit'})
     }
 
 
+
 </script>
 <div class="flex flex-col p-4 gap-4 w-full">
     <div>
-        <PrintButton transactionsData={data.allTransactions} productsWithTransactions={data.productsWithTransactions}/>
+        <PrintButton transactionsData={data.allTransactions} productsWithTransactions={data.productsWithTransactions} parentDay={day}/>
     </div>
 
     <Table.Root>

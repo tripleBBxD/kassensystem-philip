@@ -32,7 +32,7 @@
             <p>Keine Produkte vorhanden!</p>
         {:else}
             {#each $order as product, i}
-            <p class="pt-2">{product.product.name}</p>
+            <p class="">{product.product.name}</p>
             <div class="flex flex-row align-middle">
             {#if product.amount === 0}
             <Button disabled class="rounded-r-none text-center align-middle">-</Button>

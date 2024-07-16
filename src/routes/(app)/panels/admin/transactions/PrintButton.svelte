@@ -6,7 +6,7 @@
 	import type { AllTransactions, ProductsWithTransactions } from "./+page.svelte";
 	import Input from '$lib/components/ui/input/input.svelte';
 	import type { Product } from '@prisma/client';
-	import { writable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
@@ -19,18 +19,20 @@
 
     export let productsWithTransactions: ProductsWithTransactions
 
-    let day = writable(0)
+    let day = writable((new Date().getDate()))
+
+    export let parentDay: Writable<number>
+
+    $: parentDay.set($day)
 
 
     function getTurnover(day: number) {
 
         return $transactions
             .filter((transaction) => transaction.createdAt.getDate() == day)
-            .map((transaction) => transaction.products?.map((bundle) => bundle.product.price * bundle.amount)
-            .reduce((acc, val) => acc + val, 0))
-            .reduce((acc, val) => acc + val , 0)
-
-    }
+            .map((transaction) => transaction.price)
+            .reduce((acc, val) => acc + val, 0)
+        }
     
 
     function getDateFormatted(date: Date) {
@@ -102,3 +104,4 @@
     </Button>
     <Input bind:value={$day} type="number" placeholder="Tag"></Input>
 </div>
+<p class="pt-6">Umsatz: {getTurnover($day).toString()}</p>
