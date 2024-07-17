@@ -86,9 +86,22 @@
                             }
                         })
                         .map((transaction) => transaction.amount).reduce((acc, val) => acc + val, 0)
+                        .toString(),
+            product.transactions
+                        .filter((transaction) => {
+                            if (transaction.transaction.createdAt.getDate() == $day) {
+                                console.log("a")
+                                return true
+                            }
+                            else {
+                                console.log("b")
+                                return false
+                            }
+                        })
+                        .map((transaction) => transaction.amount * product.price).reduce((acc, val) => acc + val, 0)
                         .toString()
         ])
-        productAOA.unshift(["Name", "Menge"])
+        productAOA.unshift(["Name", "Menge", "Preis (Ungenau falls Preisänderung vorhanden)"])
         const productsSheet = XLSX.utils.aoa_to_sheet(productAOA)
         const transactionsSheet = XLSX.utils.aoa_to_sheet(transactionsAOA)
         const profitSheet = XLSX.utils.aoa_to_sheet(profitAOA)

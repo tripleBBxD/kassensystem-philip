@@ -12,11 +12,12 @@
 
     export let data: PageServerData
     $: order.set(data.products.map((product) => {
-        return {
-            product: product,
-            amount: 0
-        }
-    }))
+            return {
+                product: product,
+                amount: 0
+            }
+        }).sort((a, b) => b.product.price - a.product.price)
+    )
 
     let order: Writable<Order> = writable(data.products.map((product) => {
         return {
