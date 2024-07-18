@@ -39,10 +39,10 @@
             {:else}
             <Button class="rounded-r-none text-center align-middle" on:click={() => decreaseCount(i)}>-</Button>
             {/if}
+            <Button class="rounded-l-none text-center align-middle" on:click={() => increaseCount(i)}>+</Button>
             <div class="flex flex-grow justify-center">
                 <p class=" text-center align-middle m-auto">{product.amount}</p>
             </div>
-            <Button class="rounded-l-none text-center align-middle" on:click={() => increaseCount(i)}>+</Button>
             </div>
             {/each}
         {/if}
